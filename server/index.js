@@ -5,6 +5,8 @@ const PORT = 3000;
 const axios = require('axios');
 const API_KEY = require('../config/config.js');
 
+const dbCall = require('../database/index.js');
+
 const headers = {
   Authorization: API_KEY.Authorization,
   'Content-Type': 'application/json',
@@ -18,6 +20,14 @@ const baseURL = 'https://app-hrsei-api.herokuapp.com/api/fec2/hr-rfp';
 app.use(express.static(path.join(__dirname + '/../client/dist')));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+app.get('/allReviews', (req, res) => {
+  dbCall.getAll((err, allReviews) => {
+    if (err) { return res.sendStatus(200); }
+    res.status(201);
+    res.end(JSON.stringify(allReviews));
+  });
+});
 
 app.get('/', (req, res) => {
   res.send('Hello from the server!');
