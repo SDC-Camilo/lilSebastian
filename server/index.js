@@ -4,9 +4,10 @@ const app = express();
 const PORT = 3000;
 const axios = require('axios');
 const API_KEY = require('../config/config.js');
+const connection = require('../database/QandA.js');
 
 const headers = {
-  Authorization: API_KEY.Authorization,
+  Authorization: API_KEY.API_KEY,
   'Content-Type': 'application/json',
 };
 const memo = {};
@@ -19,8 +20,89 @@ app.use(express.static(path.join(__dirname + '/../client/dist')));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/qanda', (req, res) => {
+  let params = [req.query.product_id];
+  connection.getQandA(params, (err, questions) => {
+    if (err) {
+      res.sendStatus(404);
+      return;
+    }
+    res.status(200);
+    var clientObj = {
+      product_id: params[0],
+      results: []
+    };
+
+    questions.rows.forEach(row => {
+      var result = {
+        question_id: row.id,
+        question_body: row.body,
+        question_date: row.date_written,
+        asker_name: row.asker_name,
+        reported: row.reported,
+        helpful: row.helpful,
+        answers: {}
+      };
+
+      clientObj.results.push(result);
+
+    });
+
+    connection.getAnswers(params, (err, answers) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+
+      // answers.rows.forEach(row => {
+      //   var id = row.id;
+      //   clientObj.results.answers[id] = {
+      //     id: row.id,
+      //     body: row.body,
+      //     date: row.date_written,
+      //     answerer_name: row.answerer_name,
+      //     helpfulness: row.helpful
+      //   };
+      // });
+    });
+
+
+    res.send(clientObj);
+
+  });
+});
+
+app.get('/answers/:question_id', (req, res) => {
+  let params = [req.params.question_id];
+  connection.getAnswers(params, (err, answers) => {
+    if (err) {
+      res.sendStatus(404);
+      return;
+    }
+    var clientObj = {
+      question: params[0],
+      results: []
+    };
+
+    answers.rows.forEach(row => {
+      var result = {
+        answer_id: row.id,
+        body: row.body,
+        date: row.date_written,
+        answerer_name: row.answerer_name,
+        helpfulness: row.helpful
+      };
+      clientObj.results.push(result);
+    });
+    res.send(clientObj);
+
+  });
+
+});
+
 app.get('/', (req, res) => {
   res.send('Hello from the server!');
+
 });
 
 app.listen(PORT, () => {
