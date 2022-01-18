@@ -21,13 +21,33 @@ app.use(express.static(path.join(__dirname + '/../client/dist')));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+
 app.get('/allReviews', (req, res) => {
-  dbCall.getAll((err, allReviews) => {
-    if (err) { return res.sendStatus(200); }
-    res.status(201);
-    res.end(JSON.stringify(allReviews));
-  });
+  dbCall.getAll(res);
 });
+
+app.get('/reviews', (req, res) => {
+  const { page, count, sort, product_id } = req.query;
+  console.log('querys parameters::',page, count, sort, product_id);
+  dbCall.reviews(page, count, sort, product_id, res);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.get('/', (req, res) => {
   res.send('Hello from the server!');
@@ -150,24 +170,24 @@ app.put(/qa/, (req, res) => {
     });
 });
 
-app.get(/reviews/, (req, res) => {
-  if (memo[req.path + `?product_id=${req.query.product_id}`]) {
-    res.send(memo[req.path + `?product_id=${req.query.product_id}`]);
-  } else {
-    axios({
-      url: req.url,
-      headers: headers,
-      baseURL: baseURL,
-    })
-      .then((response) => {
-        memo[req.path + `?product_id=${req.query.product_id}`] = response.data;
-        res.send(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-});
+// app.get(/reviews/, (req, res) => {
+//   if (memo[req.path + `?product_id=${req.query.product_id}`]) {
+//     res.send(memo[req.path + `?product_id=${req.query.product_id}`]);
+//   } else {
+//     axios({
+//       url: req.url,
+//       headers: headers,
+//       baseURL: baseURL,
+//     })
+//       .then((response) => {
+//         memo[req.path + `?product_id=${req.query.product_id}`] = response.data;
+//         res.send(response.data);
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   }
+// });
 
 app.get('/outfits', (req, res) => {
   res.send(outfitsMemo);
