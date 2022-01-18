@@ -33,39 +33,77 @@ app.get('/qanda', (req, res) => {
       results: []
     };
 
-    questions.rows.forEach(row => {
+
+    questions.rows.forEach(question => {
       var result = {
-        question_id: row.id,
-        question_body: row.body,
-        question_date: row.date_written,
-        asker_name: row.asker_name,
-        reported: row.reported,
-        helpful: row.helpful,
-        answers: {}
+        question_id: question.id,
+        question_body: question.body,
+        question_date: question.date_written,
+        asker_name: question.asker_name,
+        reported: question.reported,
+        question_helpfulness: question.helpful,
+        // answers: {}
       };
+
+
 
       clientObj.results.push(result);
 
-    });
+      // connection.QAJOIN(params[0], (err, results) => {
+      //   results.rows.forEach(result => {
+      //     // console.log(result)
+      //     clientObj.results.forEach(question => {
+      //       if(question.question_id === result.question_id) {
+      //         console.log(question)
+      //         // question.answers[result.id] = {};
+      //       }
+      //     })
 
-    connection.getAnswers(params, (err, answers) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
+      //   });
 
-      // answers.rows.forEach(row => {
-      //   var id = row.id;
-      //   clientObj.results.answers[id] = {
-      //     id: row.id,
-      //     body: row.body,
-      //     date: row.date_written,
-      //     answerer_name: row.answerer_name,
-      //     helpfulness: row.helpful
-      //   };
+
+      //   debugger;
+      //   if (err) {
+      //     console.log(err);
+      //   }
+      //   // console.log(results);
+
+
       // });
+
     });
 
+
+    // debugger;
+
+    // clientObj.results.forEach(question => {
+    //   var question_id = question.question_id;
+    //   let params = [question_id];
+    //   connection.getQuestionAnswers(params, (err, QuestionAnswers) => {
+    //     if (err) {
+    //       console.log(err);
+    //       return;
+    //     }
+
+    //     console.log('QA1', QuestionAnswers);
+    //     question.answers = {};
+    //     QuestionAnswers.rows.forEach(answer => {
+    //       // var answerObj = {};
+    //       question.answers[answer.answer_id] = {
+    //         id: answer.id,
+    //         body: answer.body,
+    //         date: answer.date_written,
+    //         answerer_name: answer.answerer_name,
+    //         helpfulness: answer.helpful
+    //       };
+
+    //       // clientObj.results.answers = answerObj;
+
+    //     });
+
+    //   });
+
+    // });
 
     res.send(clientObj);
 
@@ -74,29 +112,39 @@ app.get('/qanda', (req, res) => {
 
 app.get('/answers/:question_id', (req, res) => {
   let params = [req.params.question_id];
-  connection.getAnswers(params, (err, answers) => {
+  connection.APJOIN(params, (err, results) => {
     if (err) {
       res.sendStatus(404);
       return;
     }
-    var clientObj = {
-      question: params[0],
-      results: []
-    };
-
-    answers.rows.forEach(row => {
-      var result = {
-        answer_id: row.id,
-        body: row.body,
-        date: row.date_written,
-        answerer_name: row.answerer_name,
-        helpfulness: row.helpful
-      };
-      clientObj.results.push(result);
-    });
-    res.send(clientObj);
+    // console.log(results);
+    res.send(results)
 
   });
+
+  // connection.getAnswers(params, (err, answers) => {
+  //   if (err) {
+  //     res.sendStatus(404);
+  //     return;
+  //   }
+  //   var clientObj = {
+  //     question: params[0],
+  //     results: []
+  //   };
+
+  //   answers.rows.forEach(row => {
+  //     var result = {
+  //       answer_id: row.id,
+  //       body: row.body,
+  //       date: row.date_written,
+  //       answerer_name: row.answerer_name,
+  //       helpfulness: row.helpful
+  //     };
+  //     clientObj.results.push(result);
+  //   });
+  //   res.send(clientObj);
+
+  // });
 
 });
 
