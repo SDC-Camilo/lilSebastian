@@ -1,9 +1,9 @@
 const { Pool } = require('pg');
 const connection = new Pool({
-  user: 'postgres',
-  host: 'localhost',
+  user: 'ubuntu',
+  host: 'ec2-3-136-161-46.us-east-2.compute.amazonaws.com',
   database: 'Reviews',
-  password: 'root',
+  password: 'ubuntu',
   port: 5432
 });
 
@@ -17,17 +17,7 @@ connection.connect((err) => {
 connection.connect();
 
 module.exports = {
-  // getAll: function (callback) {
-  //   connection.query('SELECT * FROM "reviewList"."allReviews" LIMIT 5', (err, allReviews) => {
-  //     console.log('all reviwes::',allReviews);
-  //     if (err) {
-  //       callback(err);
-  //     } else {
-  //       callback(err, allReviews);
-  //     }
-  //   });
-  //   connection.end();
-  // }
+
   getAll: async function (response) {
     try {
       const res = await connection.query('SELECT * FROM "reviewList"."allReviews" LIMIT 5');

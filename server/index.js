@@ -28,16 +28,10 @@ app.get('/allReviews', (req, res) => {
 
 app.get('/reviews', (req, res) => {
   const { page, count, sort, product_id } = req.query;
-  console.log('querys parameters::',page, count, sort, product_id);
+  console.log('querys parameters::', page, count, sort, product_id);
   dbCall.reviews(page, count, sort, product_id, res);
+
 });
-
-
-
-
-
-
-
 
 
 
