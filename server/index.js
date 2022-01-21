@@ -20,6 +20,11 @@ app.use(express.static(path.join(__dirname + '/../client/dist')));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+
+app.get('/loaderio-6000ca7a8d9355d672fe1be3028c3e9d.txt', (req,res) => {
+  res.sendFile('/home/Ubuntu/lilSebastian/loaderio-6000ca7a8d9355d672fe1be3028c3e9d.txt');
+});
+
 app.get('/qanda', (req, res) => {
   let params = [req.query.product_id];
   connection.getQandA(params, (err, questions) => {
@@ -118,7 +123,7 @@ app.get('/answers/:question_id', (req, res) => {
       return;
     }
     // console.log(results);
-    res.send(results)
+    res.send(results);
 
   });
 
@@ -223,6 +228,7 @@ app.post(/answers/, (req, res) => {
       res.send(error);
     });
 });
+
 
 app.post('/qa/questions', (req, res) => {
   axios({
