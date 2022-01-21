@@ -33,8 +33,8 @@ app.get('/reviews', (req, res) => {
 
 });
 
-app.get('/loaderio-99f8271ba70db8f6ecf107682437f3f0.txt', (req, res) => {
-  res.sendFile('/home/ubuntu/loaderio-99f8271ba70db8f6ecf107682437f3f0.txt');
+app.get('/loaderio-466cf0ea6ce42516fdc6ce754218952f.txt', (req, res) => {
+  res.sendFile('/home/ubuntu/loaderio-466cf0ea6ce42516fdc6ce754218952f.txt');
 });
 
 
