@@ -1,10 +1,10 @@
-# Lil-Bopeep Retail Site
+
 
 ![alt text](ReadMe.gif)
 
 # Introduction
 
-The client is experiencing lower sales due to the outdated client-facing retail web-portal. Project Catwalk comprises of a complete redesign of the retail website to modernize the site and boost sales. This is the Front-End Capstone Project completed during Hack Reactor.
+The client is experiencing lower sales due to the outdated client-facing retail web-portal. Project Catwalk comprises of a complete redesign of the retail website to modernize the site and boost sales. 
 
 # Overview
 
